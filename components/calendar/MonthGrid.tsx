@@ -1,5 +1,5 @@
-import type { CSSProperties } from "react";
 import type { Post } from "@/types/notion";
+import { getPostBadgeStyle } from "./postBadge";
 
 const WEEKDAY_LABELS = ["日", "月", "火", "水", "木", "金", "土"];
 
@@ -15,40 +15,6 @@ function getMonthGridDays(year: number, month: number): Date[] {
     { length: totalCells },
     (_, i) => new Date(year, month, i - firstWeekday + 1)
   );
-}
-
-function getPostBadgeStyle(post: Post): {
-  className: string;
-  style: CSSProperties;
-  icon: string;
-} {
-  switch (post.status) {
-    case "企画中":
-      return {
-        className: "border-2 border-dashed bg-white",
-        style: { borderColor: post.accountColor, color: post.accountColor },
-        icon: "",
-      };
-    case "制作中":
-      return {
-        className: "border-2 bg-white",
-        style: { borderColor: post.accountColor, color: post.accountColor },
-        icon: "",
-      };
-    case "公開済み":
-      return {
-        className: "text-white",
-        style: { background: post.accountColor },
-        icon: "✓ ",
-      };
-    default:
-      // 予約済み・その他
-      return {
-        className: "text-white",
-        style: { background: post.accountColor },
-        icon: "🕒 ",
-      };
-  }
 }
 
 interface MonthGridProps {
