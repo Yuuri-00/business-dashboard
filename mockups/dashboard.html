@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ダッシュボード | 副業管理ツール（モックアップ）</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+  <header class="bg-white border-b border-gray-200">
+    <nav class="max-w-6xl mx-auto px-6 h-14 flex items-center gap-6 text-sm">
+      <span class="font-bold text-gray-800 mr-4">🗂️ 副業管理ツール</span>
+      <a href="dashboard.html" class="font-semibold text-indigo-600">ダッシュボード</a>
+      <a href="calendar.html" class="text-gray-500 hover:text-gray-800">投稿カレンダー</a>
+      <a href="todo.html" class="text-gray-500 hover:text-gray-800">今日のTODO</a>
+      <a href="revenue.html" class="text-gray-500 hover:text-gray-800">収益管理</a>
+      <a href="settings.html" class="text-gray-500 hover:text-gray-800">設定</a>
+      <a href="login.html" class="text-gray-400 hover:text-gray-600 ml-auto">ログイン画面</a>
+    </nav>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-8 space-y-8">
+
+    <!-- 収益サマリ -->
+    <section>
+      <h2 class="text-sm font-semibold text-gray-500 mb-3">今月の収益サマリ</h2>
+      <div class="grid grid-cols-3 gap-4">
+        <div class="bg-white rounded-xl border border-gray-200 p-5">
+          <p class="text-xs text-gray-400">コンテンツ収益</p>
+          <p class="text-2xl font-bold text-gray-800 mt-1">¥128,400</p>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 p-5">
+          <p class="text-xs text-gray-400">受託収益</p>
+          <p class="text-2xl font-bold text-gray-800 mt-1">¥240,000</p>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 p-5 bg-indigo-50 border-indigo-100">
+          <p class="text-xs text-indigo-500">合計</p>
+          <p class="text-2xl font-bold text-indigo-700 mt-1">¥368,400</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- グラフ + タスク -->
+    <section class="grid grid-cols-3 gap-6">
+      <div class="col-span-2 bg-white rounded-xl border border-gray-200 p-5">
+        <h2 class="text-sm font-semibold text-gray-500 mb-3">月別収益（直近6ヶ月）</h2>
+        <canvas id="revenueChart" height="110"></canvas>
+      </div>
+
+      <div class="bg-white rounded-xl border border-gray-200 p-5">
+        <h2 class="text-sm font-semibold text-gray-500 mb-3">タスク件数</h2>
+        <div class="flex items-center justify-between py-2">
+          <span class="text-sm text-gray-600">今日</span>
+          <span class="text-lg font-bold text-gray-800">3件</span>
+        </div>
+        <div class="flex items-center justify-between py-2 border-t border-gray-100">
+          <span class="text-sm text-red-500 font-medium">期限切れ</span>
+          <span class="text-lg font-bold text-red-500">2件</span>
+        </div>
+        <div class="flex items-center justify-between py-2 border-t border-gray-100">
+          <span class="text-sm text-gray-600">今週</span>
+          <span class="text-lg font-bold text-gray-800">9件</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 直近の投稿 + 案件アラート -->
+    <section class="grid grid-cols-2 gap-6">
+      <div class="bg-white rounded-xl border border-gray-200 p-5">
+        <h2 class="text-sm font-semibold text-gray-500 mb-3">直近の公開予定投稿</h2>
+        <ul class="space-y-3">
+          <li class="flex items-center gap-3">
+            <span class="w-2.5 h-2.5 rounded-full" style="background:#1DA1F2"></span>
+            <span class="text-xs text-gray-400 w-16">6/21(日)</span>
+            <span class="text-sm text-gray-700 flex-1">新機能リリースの告知スレッド</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <span class="w-2.5 h-2.5 rounded-full" style="background:#E1306C"></span>
+            <span class="text-xs text-gray-400 w-16">6/22(月)</span>
+            <span class="text-sm text-gray-700 flex-1">作業風景のリール投稿</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <span class="w-2.5 h-2.5 rounded-full" style="background:#FF0000"></span>
+            <span class="text-xs text-gray-400 w-16">6/24(水)</span>
+            <span class="text-sm text-gray-700 flex-1">月次まとめ動画</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <span class="w-2.5 h-2.5 rounded-full" style="background:#16A34A"></span>
+            <span class="text-xs text-gray-400 w-16">6/25(木)</span>
+            <span class="text-sm text-gray-700 flex-1">ブログ記事「在宅ワーク環境紹介」</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="bg-white rounded-xl border border-gray-200 p-5">
+        <h2 class="text-sm font-semibold text-gray-500 mb-3">進行中のクライアント案件</h2>
+        <ul class="space-y-3">
+          <li class="flex items-center justify-between">
+            <span class="text-sm text-gray-700">A社 LPデザイン制作</span>
+            <span class="text-xs px-2 py-1 rounded bg-red-100 text-red-600 font-medium">納期まで2日</span>
+          </li>
+          <li class="flex items-center justify-between">
+            <span class="text-sm text-gray-700">B社 ロゴリニューアル</span>
+            <span class="text-xs px-2 py-1 rounded bg-amber-100 text-amber-600 font-medium">納期まで6日</span>
+          </li>
+          <li class="flex items-center justify-between">
+            <span class="text-sm text-gray-700">C社 月次運用サポート</span>
+            <span class="text-xs px-2 py-1 rounded bg-gray-100 text-gray-500 font-medium">継続中</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    new Chart(document.getElementById('revenueChart'), {
+      type: 'bar',
+      data: {
+        labels: ['1月', '2月', '3月', '4月', '5月', '6月'],
+        datasets: [
+          { label: 'コンテンツ収益', data: [80000, 95000, 110000, 90000, 120000, 128400], backgroundColor: '#6366f1' },
+          { label: '受託収益', data: [150000, 0, 180000, 220000, 0, 240000], backgroundColor: '#a5b4fc' }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: { x: { stacked: true }, y: { stacked: true } },
+        plugins: { legend: { position: 'bottom' } }
+      }
+    });
+  </script>
+
+</body>
+</html>

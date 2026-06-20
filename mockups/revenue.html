@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>収益管理 | 副業管理ツール（モックアップ）</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+  <header class="bg-white border-b border-gray-200">
+    <nav class="max-w-6xl mx-auto px-6 h-14 flex items-center gap-6 text-sm">
+      <span class="font-bold text-gray-800 mr-4">🗂️ 副業管理ツール</span>
+      <a href="dashboard.html" class="text-gray-500 hover:text-gray-800">ダッシュボード</a>
+      <a href="calendar.html" class="text-gray-500 hover:text-gray-800">投稿カレンダー</a>
+      <a href="todo.html" class="text-gray-500 hover:text-gray-800">今日のTODO</a>
+      <a href="revenue.html" class="font-semibold text-indigo-600">収益管理</a>
+      <a href="settings.html" class="text-gray-500 hover:text-gray-800">設定</a>
+      <a href="login.html" class="text-gray-400 hover:text-gray-600 ml-auto">ログイン画面</a>
+    </nav>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-8 space-y-6">
+
+    <!-- フィルタ -->
+    <div class="flex items-center gap-2 flex-wrap">
+      <div class="flex rounded-lg border border-gray-300 overflow-hidden text-xs">
+        <button class="px-3 py-1.5 bg-indigo-600 text-white font-medium">月次</button>
+        <button class="px-3 py-1.5 text-gray-500 border-l border-gray-300">四半期</button>
+        <button class="px-3 py-1.5 text-gray-500 border-l border-gray-300">年次</button>
+      </div>
+      <span class="w-px h-5 bg-gray-200 mx-1"></span>
+      <button class="text-xs px-3 py-1.5 rounded-full bg-indigo-100 text-indigo-700 font-medium">すべて</button>
+      <button class="text-xs px-3 py-1.5 rounded-full border border-gray-300 text-gray-500">コンテンツ収益</button>
+      <button class="text-xs px-3 py-1.5 rounded-full border border-gray-300 text-gray-500">受託収益</button>
+
+      <button class="ml-auto text-xs px-3 py-1.5 rounded-lg border border-gray-300 text-gray-500 hover:bg-gray-100">CSV出力</button>
+    </div>
+
+    <!-- 未収サマリ + 比率グラフ -->
+    <section class="grid grid-cols-3 gap-6">
+      <div class="bg-white rounded-xl border border-amber-200 bg-amber-50 p-5">
+        <p class="text-xs text-amber-600">未収（入金待ち）合計</p>
+        <p class="text-2xl font-bold text-amber-700 mt-1">¥84,000</p>
+        <p class="text-xs text-amber-500 mt-1">3件</p>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-200 p-5">
+        <p class="text-xs text-gray-400">今月の合計収益</p>
+        <p class="text-2xl font-bold text-gray-800 mt-1">¥368,400</p>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-200 p-5 row-span-2 flex flex-col">
+        <p class="text-xs text-gray-400 mb-2">コンテンツ vs 受託 比率</p>
+        <canvas id="ratioChart" class="flex-1"></canvas>
+      </div>
+
+      <div class="col-span-2 bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="bg-gray-50 text-xs text-gray-400">
+            <tr>
+              <th class="text-left font-medium px-4 py-2">日付</th>
+              <th class="text-left font-medium px-4 py-2">金額</th>
+              <th class="text-left font-medium px-4 py-2">カテゴリ</th>
+              <th class="text-left font-medium px-4 py-2">紐付け先</th>
+              <th class="text-left font-medium px-4 py-2">入金状態</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            <tr>
+              <td class="px-4 py-2.5 text-gray-500">2026/06/01</td>
+              <td class="px-4 py-2.5 font-medium text-gray-800">¥45,000</td>
+              <td class="px-4 py-2.5 text-gray-600">コンテンツ</td>
+              <td class="px-4 py-2.5 text-gray-600">YouTube広告収益</td>
+              <td class="px-4 py-2.5"><span class="text-[10px] px-2 py-0.5 rounded bg-green-100 text-green-600 font-medium">入金済</span></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2.5 text-gray-500">2026/06/05</td>
+              <td class="px-4 py-2.5 font-medium text-gray-800">¥120,000</td>
+              <td class="px-4 py-2.5 text-gray-600">受託</td>
+              <td class="px-4 py-2.5 text-gray-600">A社 LP制作</td>
+              <td class="px-4 py-2.5"><span class="text-[10px] px-2 py-0.5 rounded bg-amber-100 text-amber-600 font-medium">入金待ち</span></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2.5 text-gray-500">2026/06/10</td>
+              <td class="px-4 py-2.5 font-medium text-gray-800">¥18,400</td>
+              <td class="px-4 py-2.5 text-gray-600">コンテンツ</td>
+              <td class="px-4 py-2.5 text-gray-600">ブログ アフィリエイト</td>
+              <td class="px-4 py-2.5"><span class="text-[10px] px-2 py-0.5 rounded bg-green-100 text-green-600 font-medium">入金済</span></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2.5 text-gray-500">2026/06/15</td>
+              <td class="px-4 py-2.5 font-medium text-gray-800">¥120,000</td>
+              <td class="px-4 py-2.5 text-gray-600">受託</td>
+              <td class="px-4 py-2.5 text-gray-600">B社 ロゴ制作</td>
+              <td class="px-4 py-2.5"><span class="text-[10px] px-2 py-0.5 rounded bg-amber-100 text-amber-600 font-medium">入金待ち</span></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2.5 text-gray-500">2026/06/18</td>
+              <td class="px-4 py-2.5 font-medium text-gray-800">¥65,000</td>
+              <td class="px-4 py-2.5 text-gray-600">コンテンツ</td>
+              <td class="px-4 py-2.5 text-gray-600">X スポンサー投稿</td>
+              <td class="px-4 py-2.5"><span class="text-[10px] px-2 py-0.5 rounded bg-green-100 text-green-600 font-medium">入金済</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    new Chart(document.getElementById('ratioChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['コンテンツ収益', '受託収益'],
+        datasets: [{ data: [128400, 240000], backgroundColor: ['#6366f1', '#a5b4fc'] }]
+      },
+      options: { plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } } }
+    });
+  </script>
+
+</body>
+</html>
