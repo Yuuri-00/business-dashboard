@@ -191,28 +191,38 @@ Accounts ──(relation)── Posts ──(relation)── Tasks
 app/
  ├─ login/page.tsx
  ├─ api/auth/[...nextauth]/route.ts
- ├─ page.tsx                 # ダッシュボード
- ├─ calendar/page.tsx
- ├─ todo/page.tsx
- ├─ revenue/page.tsx
- └─ settings/page.tsx
-middleware.ts                 # 認証ガード
+ └─ (app)/                    # 認証必須ルートグループ
+     ├─ layout.tsx
+     ├─ page.tsx               # ダッシュボード
+     ├─ calendar/page.tsx
+     ├─ todo/
+     │   ├─ page.tsx
+     │   └─ actions.ts         # Server Actions
+     ├─ revenue/page.tsx
+     └─ settings/
+         ├─ page.tsx
+         └─ actions.ts         # Server Actions
+proxy.ts                       # 認証ガード（Next.js 16、旧middleware.ts）
 lib/
+ ├─ format.ts                  # 日付・金額等の表示整形ヘルパー
  └─ notion/
-     ├─ client.ts             # Notionクライアント初期化
+     ├─ client.ts              # Notionクライアント初期化
+     ├─ utils.ts                # Notionページ⇔型のマッピング共通処理
      ├─ accounts.ts
      ├─ posts.ts
      ├─ tasks.ts
      ├─ clientProjects.ts
      ├─ revenue.ts
-     └─ constants.ts          # プロパティ名等を一元管理
+     └─ constants.ts           # プロパティ名等を一元管理
 components/
- ├─ dashboard/
- ├─ calendar/                 # アカウントフィルターチップ、カレンダー本体
+ ├─ dashboard/                 # RevenueChart 等
+ ├─ calendar/                  # アカウントフィルターチップ、月/週カレンダー本体
+ ├─ nav/                       # ナビゲーションリンク
  ├─ todo/
- └─ revenue/
+ ├─ revenue/                   # RevenueView、RevenueRatioChart
+ └─ settings/                  # Accounts/ClientProjects設定セクション
 types/
- └─ notion.ts                 # アプリ内で使う整形済み型定義
+ └─ notion.ts                  # アプリ内で使う整形済み型定義
 ```
 
 ## 8. 非機能要件

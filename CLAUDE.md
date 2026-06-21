@@ -4,9 +4,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project status
 
-No code has been written yet — this repository currently contains only [DESIGN.md](DESIGN.md), the design document for a personal side-business management web app. Before writing code, read DESIGN.md in full; it is the source of truth for the data model, screens, and tech decisions below. Update DESIGN.md if an implementation decision deviates from it.
+Implemented and deployed. All 6 screens are built, all 5 Notion databases are connected, Google OAuth login works locally and in production, and the app is live on Vercel. [DESIGN.md](DESIGN.md) is the design document and source of truth for the data model, screens, and tech decisions below — read it before making architecture changes, and update it if an implementation decision deviates from it. There is no test suite yet.
 
-There is no package.json, build tooling, or test setup yet, so there are no build/lint/test commands to document. Add them here once the project is scaffolded.
+Commands:
+- `npm run dev` — starts the dev server with `--webpack` (not Turbopack — see note below)
+- `npm run build` — production build
+- `npm run lint` — eslint
+
+Turbopack's dev server (the Next.js 16 default) breaks Auth.js session handling in `proxy.ts` (`TypeError: adapterFn is not a function`, thrown right after the Google OAuth callback). `package.json`'s `dev` script is pinned to `next dev --webpack` to work around this; don't revert it to plain `next dev`. Production builds/deploys are unaffected — this is dev-server-only.
 
 ## Working rules
 
@@ -19,7 +24,7 @@ See `.claude/rules/` for the full text of each policy:
 
 - **Stack**: Next.js (App Router) + TypeScript, Tailwind CSS, Recharts for charts. Deployed to Vercel.
 - **Data store**: Notion, accessed via `@notionhq/client`. There is no separate application database — Notion databases ARE the persistence layer. All reads/writes go through server-side code (Server Actions / Route Handlers); the Notion API key must never reach the client.
-- **Auth**: NextAuth.js (Auth.js) with the Google provider, restricted to a single allowed email (`ALLOWED_EMAIL` env var) checked in the `signIn` callback. This is a single-user app — auth exists only to gate multi-device access, not to support multiple accounts. `middleware.ts` protects all routes except `/login` and the auth callback.
+- **Auth**: NextAuth.js (Auth.js) with the Google provider, restricted to a single allowed email (`ALLOWED_EMAIL` env var) checked in the `signIn` callback. This is a single-user app — auth exists only to gate multi-device access, not to support multiple accounts. `proxy.ts` (the Next.js 16 rename of `middleware.ts`) protects all routes except `/login` and the auth callback.
 
 ### Notion data model
 
@@ -51,4 +56,4 @@ The posting calendar is a custom-built UI, not an embedded Notion view — Notio
 
 ### Caching
 
-Notion's API rate limit (~3 req/sec) means reads should go through `unstable_cache`/`fetch` revalidation rather than hitting Notion on every request — longer revalidation windows for read-heavy pages (dashboard), shorter for write-heavy ones (todo). Writes use Server Actions and call `revalidatePath` afterward; see DESIGN.md §8.
+Notion's API rate limit (~3 req/sec) means reads should go through `unstable_cache`/`fetch` revalidation rather than hitting Notion on every request — longer revalidation windows for read-heavy pages (dashboard), shorter for write-heavy ones (todo). Writes use Server Actions and call both `updateTag` (Next.js 16's two-arg replacement for `revalidateTag`) and `revalidatePath` afterward; see DESIGN.md §8.
