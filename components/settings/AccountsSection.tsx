@@ -51,7 +51,7 @@ function AccountForm({
             defaultValue={defaultValue?.name}
             placeholder="例：サブX"
             required
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300"
           />
         </div>
         <div>
@@ -75,7 +75,7 @@ function AccountForm({
             type="text"
             defaultValue={defaultValue?.handle}
             placeholder="@handle"
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300"
           />
         </div>
         <div>
@@ -87,7 +87,7 @@ function AccountForm({
             type="number"
             defaultValue={defaultValue?.weeklyGoal ?? undefined}
             placeholder="例：3"
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300"
           />
         </div>
         <div className="col-span-2">

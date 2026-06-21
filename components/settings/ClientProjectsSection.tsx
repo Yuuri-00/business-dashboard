@@ -36,7 +36,7 @@ function ClientProjectForm({
             defaultValue={defaultValue?.name}
             placeholder="例：D社 採用LP制作"
             required
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300"
           />
         </div>
         <div>
@@ -46,7 +46,7 @@ function ClientProjectForm({
             type="text"
             defaultValue={defaultValue?.clientName}
             placeholder="例：D社"
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300"
           />
         </div>
         <div>
@@ -79,7 +79,7 @@ function ClientProjectForm({
             type="number"
             defaultValue={defaultValue?.amount ?? undefined}
             placeholder="例：150000"
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300"
           />
         </div>
       </div>
