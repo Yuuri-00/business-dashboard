@@ -39,7 +39,7 @@
 - ログイン処理自体はGoogleに委任（2段階認証等、Google側のセキュリティをそのまま活用）
 - `callbacks.signIn` でログインしたメールアドレスが環境変数 `ALLOWED_EMAIL`（自分のGmail）と一致するかを検証し、不一致なら拒否
 - セッションはJWT戦略（DBアダプタ不要）、Cookieは `httpOnly` / `secure` / `sameSite: lax`
-- `middleware.ts` で `/`, `/calendar`, `/todo`, `/revenue`, `/settings` を保護し、未ログイン時は `/login` にリダイレクト
+- `proxy.ts`（Next.js 16、旧middleware.ts）で `/`, `/calendar`, `/todo`, `/revenue`, `/settings` を保護し、未ログイン時は `/login` にリダイレクト
 
 ### 認証関連の環境変数
 
