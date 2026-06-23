@@ -14,6 +14,9 @@ export const ACCOUNTS_PROPERTIES = {
   handle: "ハンドル",
   status: "状態",
   weeklyGoal: "週次投稿目標",
+  profileUrl: "プロフィールURL",
+  toolUrl: "ツールURL",
+  otherUrl: "その他URL",
 } as const;
 
 export const PLATFORM_OPTIONS = [

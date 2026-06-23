@@ -26,6 +26,9 @@ export interface Account {
   handle: string;
   status: AccountStatus | null;
   weeklyGoal: number | null;
+  profileUrl: string | null;
+  toolUrl: string | null;
+  otherUrl: string | null;
 }
 
 export interface AccountInput {
@@ -35,6 +38,9 @@ export interface AccountInput {
   handle: string;
   status: AccountStatus;
   weeklyGoal: number | null;
+  profileUrl: string | null;
+  toolUrl: string | null;
+  otherUrl: string | null;
 }
 
 export interface Post {

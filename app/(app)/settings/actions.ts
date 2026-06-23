@@ -24,6 +24,9 @@ function parseAccountInput(formData: FormData): AccountInput {
     handle: String(formData.get("handle") ?? "").trim(),
     status: String(formData.get("status") ?? "") as AccountStatus,
     weeklyGoal: weeklyGoalRaw ? Number(weeklyGoalRaw) : null,
+    profileUrl: String(formData.get("profileUrl") ?? "").trim() || null,
+    toolUrl: String(formData.get("toolUrl") ?? "").trim() || null,
+    otherUrl: String(formData.get("otherUrl") ?? "").trim() || null,
   };
 }
 

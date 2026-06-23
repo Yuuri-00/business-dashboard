@@ -16,6 +16,7 @@ import {
   getSelectColor,
   getSelectName,
   getTitle,
+  getUrl,
   isFullPage,
 } from "./utils";
 import type { Account, AccountInput, AccountStatus, Platform } from "@/types/notion";
@@ -30,6 +31,9 @@ function mapPageToAccount(page: PageObjectResponse): Account {
     handle: getRichText(page, ACCOUNTS_PROPERTIES.handle),
     status: getSelectName(page, ACCOUNTS_PROPERTIES.status) as AccountStatus | null,
     weeklyGoal: getNumber(page, ACCOUNTS_PROPERTIES.weeklyGoal),
+    profileUrl: getUrl(page, ACCOUNTS_PROPERTIES.profileUrl),
+    toolUrl: getUrl(page, ACCOUNTS_PROPERTIES.toolUrl),
+    otherUrl: getUrl(page, ACCOUNTS_PROPERTIES.otherUrl),
   };
 }
 
@@ -59,6 +63,15 @@ function buildAccountProperties(
   }
   if (input.weeklyGoal !== undefined) {
     properties[ACCOUNTS_PROPERTIES.weeklyGoal] = { number: input.weeklyGoal };
+  }
+  if (input.profileUrl !== undefined) {
+    properties[ACCOUNTS_PROPERTIES.profileUrl] = { url: input.profileUrl };
+  }
+  if (input.toolUrl !== undefined) {
+    properties[ACCOUNTS_PROPERTIES.toolUrl] = { url: input.toolUrl };
+  }
+  if (input.otherUrl !== undefined) {
+    properties[ACCOUNTS_PROPERTIES.otherUrl] = { url: input.otherUrl };
   }
 
   return properties;

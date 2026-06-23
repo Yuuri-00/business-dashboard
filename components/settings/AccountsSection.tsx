@@ -131,6 +131,42 @@ function AccountForm({
             ))}
           </select>
         </div>
+        <div>
+          <label className="text-xs text-gray-500 block mb-1">
+            プロフィールURL（任意）
+          </label>
+          <input
+            name="profileUrl"
+            type="url"
+            defaultValue={defaultValue?.profileUrl ?? undefined}
+            placeholder="https://..."
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300"
+          />
+        </div>
+        <div>
+          <label className="text-xs text-gray-500 block mb-1">
+            ツールURL（任意）
+          </label>
+          <input
+            name="toolUrl"
+            type="url"
+            defaultValue={defaultValue?.toolUrl ?? undefined}
+            placeholder="https://..."
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300"
+          />
+        </div>
+        <div>
+          <label className="text-xs text-gray-500 block mb-1">
+            その他URL（任意）
+          </label>
+          <input
+            name="otherUrl"
+            type="url"
+            defaultValue={defaultValue?.otherUrl ?? undefined}
+            placeholder="https://..."
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300"
+          />
+        </div>
       </div>
       <div className="flex justify-end gap-2 mt-4">
         {onCancel && (
@@ -203,13 +239,14 @@ export function AccountsSection({
               <th className="text-left font-medium px-4 py-2">ハンドル</th>
               <th className="text-left font-medium px-4 py-2">週次投稿目標</th>
               <th className="text-left font-medium px-4 py-2">状態</th>
+              <th className="text-left font-medium px-4 py-2">リンク</th>
               <th className="text-left font-medium px-4 py-2 w-28">操作</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
             {accounts.length === 0 && (
               <tr>
-                <td colSpan={7} className="px-4 py-6 text-center text-gray-400">
+                <td colSpan={8} className="px-4 py-6 text-center text-gray-400">
                   アカウントが登録されていません
                 </td>
               </tr>
@@ -217,7 +254,7 @@ export function AccountsSection({
             {accounts.map((account) =>
               editingId === account.id ? (
                 <tr key={account.id}>
-                  <td colSpan={7} className="px-4 py-4 bg-indigo-50">
+                  <td colSpan={8} className="px-4 py-4 bg-indigo-50">
                     <AccountForm
                       defaultValue={account}
                       colorOptions={colorOptions}
@@ -256,6 +293,41 @@ export function AccountsSection({
                     >
                       {account.status}
                     </span>
+                  </td>
+                  <td className="px-4 py-2.5 text-xs space-x-2">
+                    {account.profileUrl && (
+                      <a
+                        href={account.profileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-indigo-600 hover:underline"
+                      >
+                        プロフィール
+                      </a>
+                    )}
+                    {account.toolUrl && (
+                      <a
+                        href={account.toolUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-indigo-600 hover:underline"
+                      >
+                        ツール
+                      </a>
+                    )}
+                    {account.otherUrl && (
+                      <a
+                        href={account.otherUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-indigo-600 hover:underline"
+                      >
+                        その他
+                      </a>
+                    )}
+                    {!account.profileUrl && !account.toolUrl && !account.otherUrl && (
+                      <span className="text-gray-400">—</span>
+                    )}
                   </td>
                   <td className="px-4 py-2.5 text-xs">
                     <button
