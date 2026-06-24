@@ -40,7 +40,7 @@ function AccountForm({
         onSubmit(formData);
       }}
     >
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="text-xs text-gray-500 block mb-1">
             アカウント名（表示名）
@@ -90,7 +90,7 @@ function AccountForm({
             className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300"
           />
         </div>
-        <div className="col-span-2">
+        <div className="sm:col-span-2">
           <label className="text-xs text-gray-500 block mb-1.5">
             カラー（カレンダー表示色）
           </label>
@@ -229,7 +229,7 @@ export function AccountsSection({
         </span>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-xl border border-gray-200 overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="bg-gray-50 text-xs text-gray-400">
             <tr>

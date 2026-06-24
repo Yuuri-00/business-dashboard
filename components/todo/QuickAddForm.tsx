@@ -21,7 +21,7 @@ export function QuickAddForm() {
         name="title"
         placeholder="タスクを追加してEnter..."
         required
-        className="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300"
+        className="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300"
       />
       <button
         type="submit"

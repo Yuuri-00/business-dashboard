@@ -30,7 +30,8 @@ export function WeekGrid({ weekStart, posts }: WeekGridProps) {
   }
 
   return (
-    <div className="grid grid-cols-7">
+    <div className="overflow-x-auto">
+      <div className="min-w-[640px] grid grid-cols-7">
       {days.map((day, i) => {
         const key = toDateKey(day);
         const dayPosts = postsByDay.get(key) ?? [];
@@ -78,6 +79,7 @@ export function WeekGrid({ weekStart, posts }: WeekGridProps) {
           </div>
         );
       })}
+      </div>
     </div>
   );
 }

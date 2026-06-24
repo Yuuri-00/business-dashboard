@@ -27,7 +27,7 @@ function ClientProjectForm({
 }: ClientProjectFormProps) {
   return (
     <form action={onSubmit}>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="text-xs text-gray-500 block mb-1">案件名</label>
           <input
@@ -139,7 +139,7 @@ export function ClientProjectsSection({
         案件マスタ（クライアントワーク）
       </h2>
 
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-xl border border-gray-200 overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="bg-gray-50 text-xs text-gray-400">
             <tr>

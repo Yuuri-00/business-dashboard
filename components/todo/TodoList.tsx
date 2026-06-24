@@ -39,7 +39,7 @@ function TaskRow({
   const badge = dueBadge(task.due, todayStart);
 
   return (
-    <li className={`flex items-center gap-3 px-4 py-3 ${isDone ? "opacity-50" : ""}`}>
+    <li className={`flex flex-wrap items-center gap-3 px-4 py-3 ${isDone ? "opacity-50" : ""}`}>
       <input
         type="checkbox"
         checked={isDone}
@@ -47,7 +47,7 @@ function TaskRow({
         className="w-4 h-4 accent-indigo-600"
       />
       <span
-        className={`flex-1 text-sm text-gray-700 ${isDone ? "line-through text-gray-500" : ""}`}
+        className={`flex-1 min-w-0 text-sm text-gray-700 ${isDone ? "line-through text-gray-500" : ""}`}
       >
         {task.title}
       </span>

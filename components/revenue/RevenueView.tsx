@@ -164,7 +164,7 @@ export function RevenueView({ records }: { records: RevenueRecordItem[] }) {
         </button>
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-amber-50 rounded-xl border border-amber-200 p-5">
           <p className="text-xs text-amber-600">未収（入金待ち）合計</p>
           <p className="text-2xl font-bold text-amber-700 mt-1">{formatYen(unpaidTotal)}</p>
@@ -174,12 +174,12 @@ export function RevenueView({ records }: { records: RevenueRecordItem[] }) {
           <p className="text-xs text-gray-400">{period}の合計収益</p>
           <p className="text-2xl font-bold text-gray-800 mt-1">{formatYen(totalForPeriod)}</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-5 row-span-2 flex flex-col">
+        <div className="bg-white rounded-xl border border-gray-200 p-5 md:row-span-2 flex flex-col">
           <p className="text-xs text-gray-400 mb-2">カテゴリ別比率</p>
           <RevenueRatioChart data={ratioData} />
         </div>
 
-        <div className="col-span-2 bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="md:col-span-2 bg-white rounded-xl border border-gray-200 overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-gray-50 text-xs text-gray-400">
               <tr>

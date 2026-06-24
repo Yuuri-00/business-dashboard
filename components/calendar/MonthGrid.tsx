@@ -37,7 +37,8 @@ export function MonthGrid({ year, month, posts }: MonthGridProps) {
   }
 
   return (
-    <>
+    <div className="overflow-x-auto">
+      <div className="min-w-[640px]">
       <div className="grid grid-cols-7 text-xs text-gray-400 border-b border-gray-100">
         {WEEKDAY_LABELS.map((label) => (
           <div key={label} className="py-2 text-center">
@@ -115,6 +116,7 @@ export function MonthGrid({ year, month, posts }: MonthGridProps) {
           );
         })}
       </div>
-    </>
+      </div>
+    </div>
   );
 }

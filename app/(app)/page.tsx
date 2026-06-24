@@ -125,7 +125,7 @@ export default async function DashboardPage() {
         <h2 className="text-sm font-semibold text-gray-500 mb-3">
           今月の収益サマリ
         </h2>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {REVENUE_CATEGORY_OPTIONS.map((category) => (
             <div
               key={category}
@@ -137,7 +137,7 @@ export default async function DashboardPage() {
               </p>
             </div>
           ))}
-          <div className="bg-indigo-50 rounded-xl border border-indigo-100 p-5 col-span-3">
+          <div className="bg-indigo-50 rounded-xl border border-indigo-100 p-5 sm:col-span-3">
             <p className="text-xs text-indigo-500">合計</p>
             <p className="text-2xl font-bold text-indigo-700 mt-1">
               {formatYen(totalRevenueThisMonth)}
@@ -146,8 +146,8 @@ export default async function DashboardPage() {
         </div>
       </section>
 
-      <section className="grid grid-cols-3 gap-6">
-        <div className="col-span-2 bg-white rounded-xl border border-gray-200 p-5">
+      <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-5">
           <h2 className="text-sm font-semibold text-gray-500 mb-3">
             月別収益（直近6ヶ月）
           </h2>
@@ -179,7 +179,7 @@ export default async function DashboardPage() {
         </div>
       </section>
 
-      <section className="grid grid-cols-2 gap-6">
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white rounded-xl border border-gray-200 p-5">
           <h2 className="text-sm font-semibold text-gray-500 mb-3">
             直近の公開予定投稿
