@@ -71,6 +71,7 @@ export interface Task {
   status: TaskStatus | null;
   relatedPostId: string | null;
   relatedProjectId: string | null;
+  relatedAccountId: string | null;
 }
 
 export interface TaskInput {
@@ -80,6 +81,7 @@ export interface TaskInput {
   status: TaskStatus;
   relatedPostId: string | null;
   relatedProjectId: string | null;
+  relatedAccountId: string | null;
 }
 
 export interface ClientProject {

@@ -1,8 +1,13 @@
 "use client";
 
-import { useOptimistic, useTransition } from "react";
-import { toggleTaskStatusAction } from "@/app/(app)/todo/actions";
-import type { Task, TaskStatus } from "@/types/notion";
+import { useOptimistic, useState, useTransition } from "react";
+import {
+  deleteTaskAction,
+  toggleTaskStatusAction,
+  updateTaskAction,
+} from "@/app/(app)/todo/actions";
+import { TaskEditModal } from "./TaskEditModal";
+import type { Account, ClientProject, Post, Task, TaskStatus } from "@/types/notion";
 
 export interface TodoItem {
   task: Task;
@@ -29,10 +34,12 @@ function TaskRow({
   item,
   todayStart,
   onToggle,
+  onEdit,
 }: {
   item: TodoItem;
   todayStart: Date;
   onToggle: (item: TodoItem) => void;
+  onEdit: (task: Task) => void;
 }) {
   const { task, relatedLabel, relatedColor } = item;
   const isDone = task.status === "完了";
@@ -51,6 +58,11 @@ function TaskRow({
       >
         {task.title}
       </span>
+      {!task.due && (
+        <span className="text-[10px] px-2 py-0.5 rounded font-medium bg-gray-100 text-gray-400">
+          未定
+        </span>
+      )}
       {badge && (
         <span className={`text-[10px] px-2 py-0.5 rounded font-medium ${badge.className}`}>
           {badge.text}
@@ -68,11 +80,26 @@ function TaskRow({
           {relatedLabel}
         </span>
       )}
+      <button
+        type="button"
+        onClick={() => onEdit(task)}
+        className="text-gray-400 hover:text-gray-700"
+        aria-label="編集"
+      >
+        ✎
+      </button>
     </li>
   );
 }
 
-export function TodoList({ items }: { items: TodoItem[] }) {
+interface TodoListProps {
+  items: TodoItem[];
+  posts: Post[];
+  clientProjects: ClientProject[];
+  accounts: Account[];
+}
+
+export function TodoList({ items, posts, clientProjects, accounts }: TodoListProps) {
   const [optimisticItems, applyOptimisticUpdate] = useOptimistic(
     items,
     (state, update: { id: string; status: TaskStatus }) =>
@@ -83,12 +110,31 @@ export function TodoList({ items }: { items: TodoItem[] }) {
       )
   );
   const [, startTransition] = useTransition();
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [isEditPending, startEditTransition] = useTransition();
 
   function handleToggle(item: TodoItem) {
     const nextStatus: TaskStatus = item.task.status === "完了" ? "未着手" : "完了";
     startTransition(async () => {
       applyOptimisticUpdate({ id: item.task.id, status: nextStatus });
       await toggleTaskStatusAction(item.task.id, nextStatus);
+    });
+  }
+
+  function handleUpdate(formData: FormData) {
+    if (!editingTask) return;
+    startEditTransition(async () => {
+      await updateTaskAction(editingTask.id, formData);
+      setEditingTask(null);
+    });
+  }
+
+  function handleDelete() {
+    if (!editingTask) return;
+    if (!confirm("このタスクを削除しますか？")) return;
+    startEditTransition(async () => {
+      await deleteTaskAction(editingTask.id);
+      setEditingTask(null);
     });
   }
 
@@ -124,6 +170,7 @@ export function TodoList({ items }: { items: TodoItem[] }) {
                 item={item}
                 todayStart={todayStart}
                 onToggle={handleToggle}
+                onEdit={setEditingTask}
               />
             ))}
           </ul>
@@ -144,11 +191,25 @@ export function TodoList({ items }: { items: TodoItem[] }) {
                 item={item}
                 todayStart={todayStart}
                 onToggle={handleToggle}
+                onEdit={setEditingTask}
               />
             ))}
           </ul>
         )}
       </section>
+
+      {editingTask && (
+        <TaskEditModal
+          task={editingTask}
+          posts={posts}
+          clientProjects={clientProjects}
+          accounts={accounts}
+          onSubmit={handleUpdate}
+          onClose={() => setEditingTask(null)}
+          onDelete={handleDelete}
+          pending={isEditPending}
+        />
+      )}
     </div>
   );
 }

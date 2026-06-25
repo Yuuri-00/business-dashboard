@@ -10,9 +10,11 @@ function toDateKey(date: Date): string {
 interface WeekGridProps {
   weekStart: Date;
   posts: Post[];
+  onDayClick: (date: Date) => void;
+  onPostClick: (post: Post) => void;
 }
 
-export function WeekGrid({ weekStart, posts }: WeekGridProps) {
+export function WeekGrid({ weekStart, posts, onDayClick, onPostClick }: WeekGridProps) {
   const days = Array.from({ length: 7 }, (_, i) => {
     const d = new Date(weekStart);
     d.setDate(d.getDate() + i);
@@ -41,8 +43,9 @@ export function WeekGrid({ weekStart, posts }: WeekGridProps) {
         return (
           <div
             key={key}
+            onClick={() => onDayClick(day)}
             className={[
-              "min-h-80 p-2",
+              "min-h-80 p-2 cursor-pointer hover:bg-gray-50",
               isLastColumn ? "" : "border-r border-gray-100",
               isToday ? "bg-indigo-50" : "",
             ].join(" ")}
@@ -67,7 +70,11 @@ export function WeekGrid({ weekStart, posts }: WeekGridProps) {
                 return (
                   <div
                     key={post.id}
-                    className={`flex items-center gap-1 text-[10px] rounded px-1.5 py-1 ${badge.className}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onPostClick(post);
+                    }}
+                    className={`flex items-center gap-1 text-[10px] rounded px-1.5 py-1 cursor-pointer ${badge.className}`}
                     style={badge.style}
                   >
                     {badge.icon}

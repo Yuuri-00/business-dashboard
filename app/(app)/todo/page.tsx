@@ -1,3 +1,4 @@
+import { getCachedAccounts } from "@/lib/notion/accounts";
 import { getCachedClientProjects } from "@/lib/notion/clientProjects";
 import { getCachedPosts } from "@/lib/notion/posts";
 import { getCachedTasks } from "@/lib/notion/tasks";
@@ -5,10 +6,11 @@ import { QuickAddForm } from "@/components/todo/QuickAddForm";
 import { TodoList, type TodoItem } from "@/components/todo/TodoList";
 
 export default async function TodoPage() {
-  const [tasks, posts, clientProjects] = await Promise.all([
+  const [tasks, posts, clientProjects, accounts] = await Promise.all([
     getCachedTasks(),
     getCachedPosts(),
     getCachedClientProjects(),
+    getCachedAccounts(),
   ]);
 
   const items: TodoItem[] = tasks.map((task) => {
@@ -24,6 +26,12 @@ export default async function TodoPage() {
         return { task, relatedLabel: project.name, relatedColor: null };
       }
     }
+    if (task.relatedAccountId) {
+      const account = accounts.find((a) => a.id === task.relatedAccountId);
+      if (account) {
+        return { task, relatedLabel: account.name, relatedColor: account.color };
+      }
+    }
     return { task, relatedLabel: null, relatedColor: null };
   });
 
@@ -36,8 +44,13 @@ export default async function TodoPage() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      <QuickAddForm />
-      <TodoList items={items} />
+      <QuickAddForm posts={posts} clientProjects={clientProjects} accounts={accounts} />
+      <TodoList
+        items={items}
+        posts={posts}
+        clientProjects={clientProjects}
+        accounts={accounts}
+      />
     </div>
   );
 }

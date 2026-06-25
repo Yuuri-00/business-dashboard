@@ -24,6 +24,7 @@ function mapPageToTask(page: PageObjectResponse): Task {
     status: getSelectName(page, TASKS_PROPERTIES.status) as TaskStatus | null,
     relatedPostId: getRelationIds(page, TASKS_PROPERTIES.relatedPost)[0] ?? null,
     relatedProjectId: getRelationIds(page, TASKS_PROPERTIES.relatedProject)[0] ?? null,
+    relatedAccountId: getRelationIds(page, TASKS_PROPERTIES.relatedAccount)[0] ?? null,
   };
 }
 
@@ -56,6 +57,11 @@ function buildTaskProperties(
   if (input.relatedProjectId !== undefined) {
     properties[TASKS_PROPERTIES.relatedProject] = {
       relation: input.relatedProjectId ? [{ id: input.relatedProjectId }] : [],
+    };
+  }
+  if (input.relatedAccountId !== undefined) {
+    properties[TASKS_PROPERTIES.relatedAccount] = {
+      relation: input.relatedAccountId ? [{ id: input.relatedAccountId }] : [],
     };
   }
 

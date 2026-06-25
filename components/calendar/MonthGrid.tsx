@@ -21,9 +21,11 @@ interface MonthGridProps {
   year: number;
   month: number; // 0-indexed
   posts: Post[];
+  onDayClick: (date: Date) => void;
+  onPostClick: (post: Post) => void;
 }
 
-export function MonthGrid({ year, month, posts }: MonthGridProps) {
+export function MonthGrid({ year, month, posts, onDayClick, onPostClick }: MonthGridProps) {
   const days = getMonthGridDays(year, month);
   const todayKey = toDateKey(new Date());
 
@@ -58,11 +60,13 @@ export function MonthGrid({ year, month, posts }: MonthGridProps) {
           return (
             <div
               key={key}
+              onClick={() => inMonth && onDayClick(day)}
               className={[
                 "h-24 p-1.5",
                 isLastColumn ? "" : "border-r border-gray-100",
                 isLastRow ? "" : "border-b border-gray-100",
                 isToday ? "bg-indigo-50" : "",
+                inMonth ? "cursor-pointer hover:bg-gray-50" : "",
               ].join(" ")}
             >
               {inMonth && (
@@ -83,7 +87,11 @@ export function MonthGrid({ year, month, posts }: MonthGridProps) {
                         return (
                           <div
                             key={post.id}
-                            className={`flex items-center gap-1 text-[10px] rounded px-1 py-0.5 truncate ${badge.className}`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onPostClick(post);
+                            }}
+                            className={`flex items-center gap-1 text-[10px] rounded px-1 py-0.5 truncate cursor-pointer ${badge.className}`}
                             style={badge.style}
                           >
                             {badge.icon}

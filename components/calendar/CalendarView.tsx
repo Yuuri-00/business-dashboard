@@ -1,12 +1,19 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useTransition } from "react";
+import {
+  archivePostAction,
+  createPostAction,
+  updatePostAction,
+} from "@/app/(app)/calendar/actions";
 import type { Account, Post } from "@/types/notion";
 import { AccountFilterChips } from "./AccountFilterChips";
 import { MonthGrid } from "./MonthGrid";
+import { PostFormModal } from "./PostFormModal";
 import { WeekGrid } from "./WeekGrid";
 
 type View = "month" | "week";
+type ModalState = { mode: "create"; date: Date } | { mode: "edit"; post: Post };
 
 function getWeekStart(date: Date): Date {
   const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -28,6 +35,30 @@ export function CalendarView({ accounts, posts }: CalendarViewProps) {
     const now = new Date();
     return new Date(now.getFullYear(), now.getMonth(), now.getDate());
   });
+  const [modalState, setModalState] = useState<ModalState | null>(null);
+  const [isPending, startTransition] = useTransition();
+
+  function handleCreate(formData: FormData) {
+    startTransition(async () => {
+      await createPostAction(formData);
+      setModalState(null);
+    });
+  }
+
+  function handleUpdate(id: string, formData: FormData) {
+    startTransition(async () => {
+      await updatePostAction(id, formData);
+      setModalState(null);
+    });
+  }
+
+  function handleDelete(id: string) {
+    if (!confirm("この投稿を削除しますか？")) return;
+    startTransition(async () => {
+      await archivePostAction(id);
+      setModalState(null);
+    });
+  }
 
   const visiblePosts = useMemo(
     () => posts.filter((post) => post.accountName && selected.has(post.accountName)),
@@ -153,11 +184,40 @@ export function CalendarView({ accounts, posts }: CalendarViewProps) {
             year={cursor.getFullYear()}
             month={cursor.getMonth()}
             posts={visiblePosts}
+            onDayClick={(date) => setModalState({ mode: "create", date })}
+            onPostClick={(post) => setModalState({ mode: "edit", post })}
           />
         ) : (
-          <WeekGrid weekStart={weekStart} posts={visiblePosts} />
+          <WeekGrid
+            weekStart={weekStart}
+            posts={visiblePosts}
+            onDayClick={(date) => setModalState({ mode: "create", date })}
+            onPostClick={(post) => setModalState({ mode: "edit", post })}
+          />
         )}
       </div>
+
+      {modalState && (
+        <PostFormModal
+          accounts={accounts}
+          title={modalState.mode === "create" ? "投稿を追加" : "投稿を編集"}
+          defaultValue={modalState.mode === "edit" ? modalState.post : undefined}
+          defaultDate={modalState.mode === "create" ? modalState.date : undefined}
+          onSubmit={(formData) =>
+            modalState.mode === "create"
+              ? handleCreate(formData)
+              : handleUpdate(modalState.post.id, formData)
+          }
+          onClose={() => setModalState(null)}
+          onDelete={
+            modalState.mode === "edit"
+              ? () => handleDelete(modalState.post.id)
+              : undefined
+          }
+          submitLabel={modalState.mode === "create" ? "追加する" : "保存"}
+          pending={isPending}
+        />
+      )}
     </div>
   );
 }

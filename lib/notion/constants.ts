@@ -52,6 +52,7 @@ export const TASKS_PROPERTIES = {
   status: "状態",
   relatedPost: "関連Post",
   relatedProject: "関連案件",
+  relatedAccount: "関連アカウント",
 } as const;
 
 export const TASK_PRIORITY_OPTIONS = ["高", "中", "低"] as const;
