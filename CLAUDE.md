@@ -10,15 +10,17 @@ Commands:
 - `npm run dev` — starts the dev server with `--webpack` (not Turbopack — see note below)
 - `npm run build` — production build
 - `npm run lint` — eslint
+- `npm run setup-notion` — idempotently creates any missing Notion DBs (under `NOTION_PARENT_PAGE_ID`) and patches missing properties onto existing ones; never modifies or removes existing properties. See `scripts/setup-notion.ts`.
 
 Turbopack's dev server (the Next.js 16 default) breaks Auth.js session handling in `proxy.ts` (`TypeError: adapterFn is not a function`, thrown right after the Google OAuth callback). `package.json`'s `dev` script is pinned to `next dev --webpack` to work around this; don't revert it to plain `next dev`. Production builds/deploys are unaffected — this is dev-server-only.
 
 ## Working rules
 
-See `.claude/rules/` for the full text of each policy:
+See `.claude/rules/` for the full text of each project-specific policy:
 
-- [config-separation.md](.claude/rules/config-separation.md) — keep deployment/account-specific values (Notion DB IDs, account names/colors, allowed login email, API keys, select-option literals) in env vars or a config/constants file, never hardcoded inline.
 - [edit-approval.md](.claude/rules/edit-approval.md) — never edit a file without first describing the change and getting explicit approval, even for changes that seem obviously correct.
+
+The config-separation principle (keep deployment/account-specific values — Notion DB IDs, account names/colors, allowed login email, API keys, select-option literals — in env vars or a config/constants file, never hardcoded inline) is now a rule shared with the sibling wp-draft-tool project; see the parent folder's `.claude/rules/config-separation.md`.
 
 ## Architecture (as designed in DESIGN.md)
 
@@ -40,7 +42,7 @@ Accounts ──(relation)── Posts ──(relation)── Tasks
 
 - **Accounts** — one row per SNS/platform account (X, Instagram, YouTube, blog, etc.), each with a display color used to color-code that account's items in the calendar UI.
 - **Posts** — content pieces. Carries both a `select` property for the account (used directly for calendar coloring, since Notion calendar views can't color by relation) and a `relation` to Accounts (used for analytics/rollups). Don't collapse these into just the relation — see DESIGN.md §4.2 for why both exist.
-- **Tasks** — todos, optionally linked to a Post or a ClientProject via separate relation properties.
+- **Tasks** — todos, optionally linked to a Post, a ClientProject, or directly to an Account via separate relation properties (`関連Post`/`関連案件`/`関連アカウント`).
 - **ClientProjects** — occasional freelance/client work, separate from the content-posting workflow.
 - **Revenue** — income records, linked to either a Post (content revenue) or a ClientProject (client revenue).
 

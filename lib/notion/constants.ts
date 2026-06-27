@@ -4,6 +4,7 @@ export const NOTION_DB_ID = {
   tasks: process.env.NOTION_DB_TASKS!,
   clientProjects: process.env.NOTION_DB_CLIENT_PROJECTS!,
   revenue: process.env.NOTION_DB_REVENUE!,
+  tools: process.env.NOTION_DB_TOOLS!,
 } as const;
 
 // プロパティ名は実際のNotionワークスペースのスキーマに合わせて調整する
@@ -17,6 +18,15 @@ export const ACCOUNTS_PROPERTIES = {
   profileUrl: "プロフィールURL",
   toolUrl: "ツールURL",
   otherUrl: "その他URL",
+  externalKey: "外部連携キー",
+  tool: "使用ツール",
+} as const;
+
+export const TOOLS_PROPERTIES = {
+  name: "名前",
+  url: "URL",
+  paramKey: "パラメータ名",
+  platforms: "対応プラットフォーム",
 } as const;
 
 export const PLATFORM_OPTIONS = [

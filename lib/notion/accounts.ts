@@ -12,6 +12,7 @@ import {
 } from "./constants";
 import {
   getNumber,
+  getRelationIds,
   getRichText,
   getSelectColor,
   getSelectName,
@@ -34,6 +35,8 @@ function mapPageToAccount(page: PageObjectResponse): Account {
     profileUrl: getUrl(page, ACCOUNTS_PROPERTIES.profileUrl),
     toolUrl: getUrl(page, ACCOUNTS_PROPERTIES.toolUrl),
     otherUrl: getUrl(page, ACCOUNTS_PROPERTIES.otherUrl),
+    externalKey: getRichText(page, ACCOUNTS_PROPERTIES.externalKey) || null,
+    toolId: getRelationIds(page, ACCOUNTS_PROPERTIES.tool)[0] ?? null,
   };
 }
 
@@ -72,6 +75,16 @@ function buildAccountProperties(
   }
   if (input.otherUrl !== undefined) {
     properties[ACCOUNTS_PROPERTIES.otherUrl] = { url: input.otherUrl };
+  }
+  if (input.externalKey !== undefined) {
+    properties[ACCOUNTS_PROPERTIES.externalKey] = {
+      rich_text: [{ text: { content: input.externalKey ?? "" } }],
+    };
+  }
+  if (input.toolId !== undefined) {
+    properties[ACCOUNTS_PROPERTIES.tool] = {
+      relation: input.toolId ? [{ id: input.toolId }] : [],
+    };
   }
 
   return properties;

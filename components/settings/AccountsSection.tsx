@@ -8,11 +8,12 @@ import {
 } from "@/app/(app)/settings/actions";
 import { ACCOUNT_STATUS_OPTIONS, PLATFORM_OPTIONS } from "@/lib/notion/constants";
 import type { ColorOption } from "@/lib/notion/accounts";
-import type { Account } from "@/types/notion";
+import type { Account, Tool } from "@/types/notion";
 
 interface AccountFormProps {
   defaultValue?: Account;
   colorOptions: ColorOption[];
+  tools: Tool[];
   onSubmit: (formData: FormData) => void;
   onCancel?: () => void;
   submitLabel: string;
@@ -22,6 +23,7 @@ interface AccountFormProps {
 function AccountForm({
   defaultValue,
   colorOptions,
+  tools,
   onSubmit,
   onCancel,
   submitLabel,
@@ -167,6 +169,35 @@ function AccountForm({
             className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300"
           />
         </div>
+        <div>
+          <label className="text-xs text-gray-500 block mb-1">
+            使用ツール（任意）
+          </label>
+          <select
+            name="toolId"
+            defaultValue={defaultValue?.toolId ?? ""}
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600"
+          >
+            <option value="">未設定</option>
+            {tools.map((tool) => (
+              <option key={tool.id} value={tool.id}>
+                {tool.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="text-xs text-gray-500 block mb-1">
+            外部連携キー（任意。使用ツール側でこのアカウントを識別する文字列）
+          </label>
+          <input
+            name="externalKey"
+            type="text"
+            defaultValue={defaultValue?.externalKey ?? undefined}
+            placeholder="例：my-blog"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300"
+          />
+        </div>
       </div>
       <div className="flex justify-end gap-2 mt-4">
         {onCancel && (
@@ -190,12 +221,20 @@ function AccountForm({
   );
 }
 
+function buildToolLink(tool: Tool, externalKey: string | null): string | null {
+  if (!tool.url || !tool.paramKey || !externalKey) return null;
+  const separator = tool.url.includes("?") ? "&" : "?";
+  return `${tool.url}${separator}${tool.paramKey}=${encodeURIComponent(externalKey)}`;
+}
+
 export function AccountsSection({
   accounts,
   colorOptions,
+  tools,
 }: {
   accounts: Account[];
   colorOptions: ColorOption[];
+  tools: Tool[];
 }) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -258,6 +297,7 @@ export function AccountsSection({
                     <AccountForm
                       defaultValue={account}
                       colorOptions={colorOptions}
+                      tools={tools}
                       onSubmit={(formData) => handleUpdate(account.id, formData)}
                       onCancel={() => setEditingId(null)}
                       submitLabel="保存"
@@ -325,9 +365,29 @@ export function AccountsSection({
                         その他
                       </a>
                     )}
-                    {!account.profileUrl && !account.toolUrl && !account.otherUrl && (
-                      <span className="text-gray-400">—</span>
-                    )}
+                    {(() => {
+                      const selectedTool = tools.find((t) => t.id === account.toolId);
+                      const href = selectedTool
+                        ? buildToolLink(selectedTool, account.externalKey)
+                        : null;
+                      if (!selectedTool || !href) return null;
+                      return (
+                        <a
+                          href={href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-indigo-600 hover:underline"
+                        >
+                          {selectedTool.name}
+                        </a>
+                      );
+                    })()}
+                    {!account.profileUrl &&
+                      !account.toolUrl &&
+                      !account.otherUrl &&
+                      !tools.find((t) => t.id === account.toolId) && (
+                        <span className="text-gray-400">—</span>
+                      )}
                   </td>
                   <td className="px-4 py-2.5 text-xs">
                     <button
@@ -358,6 +418,7 @@ export function AccountsSection({
         </h3>
         <AccountForm
           colorOptions={colorOptions}
+          tools={tools}
           onSubmit={handleCreate}
           submitLabel="追加する"
           pending={isPending}

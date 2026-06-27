@@ -7,12 +7,14 @@ import {
   createClientProject,
   updateClientProject,
 } from "@/lib/notion/clientProjects";
+import { archiveTool, createTool, updateTool } from "@/lib/notion/tools";
 import type {
   AccountInput,
   AccountStatus,
   ClientProjectInput,
   ClientProjectStatus,
   Platform,
+  ToolInput,
 } from "@/types/notion";
 
 function parseAccountInput(formData: FormData): AccountInput {
@@ -27,6 +29,8 @@ function parseAccountInput(formData: FormData): AccountInput {
     profileUrl: String(formData.get("profileUrl") ?? "").trim() || null,
     toolUrl: String(formData.get("toolUrl") ?? "").trim() || null,
     otherUrl: String(formData.get("otherUrl") ?? "").trim() || null,
+    externalKey: String(formData.get("externalKey") ?? "").trim() || null,
+    toolId: String(formData.get("toolId") ?? "").trim() || null,
   };
 }
 
@@ -100,4 +104,40 @@ export async function archiveClientProjectAction(id: string): Promise<void> {
   updateTag("client-projects");
   revalidatePath("/settings");
   revalidatePath("/");
+}
+
+function parseToolInput(formData: FormData): ToolInput {
+  const platformsRaw = String(formData.get("platforms") ?? "").trim();
+  return {
+    name: String(formData.get("name") ?? "").trim(),
+    url: String(formData.get("url") ?? "").trim() || null,
+    paramKey: String(formData.get("paramKey") ?? "").trim() || null,
+    platforms: platformsRaw
+      ? (platformsRaw.split(",").filter(Boolean) as Platform[])
+      : [],
+  };
+}
+
+export async function createToolAction(formData: FormData): Promise<void> {
+  const input = parseToolInput(formData);
+  if (!input.name) return;
+
+  await createTool(input);
+  updateTag("tools");
+  revalidatePath("/settings");
+}
+
+export async function updateToolAction(id: string, formData: FormData): Promise<void> {
+  const input = parseToolInput(formData);
+  if (!input.name) return;
+
+  await updateTool(id, input);
+  updateTag("tools");
+  revalidatePath("/settings");
+}
+
+export async function archiveToolAction(id: string): Promise<void> {
+  await archiveTool(id);
+  updateTag("tools");
+  revalidatePath("/settings");
 }

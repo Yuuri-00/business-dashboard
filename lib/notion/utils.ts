@@ -72,3 +72,12 @@ export function getRelationIds(
   if (prop?.type !== "relation") return [];
   return prop.relation.map((r) => r.id);
 }
+
+export function getMultiSelectNames(
+  page: PageObjectResponse,
+  property: string
+): string[] {
+  const prop = page.properties[property];
+  if (prop?.type !== "multi_select") return [];
+  return prop.multi_select.map((o) => o.name);
+}

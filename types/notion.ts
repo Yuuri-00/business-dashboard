@@ -29,6 +29,8 @@ export interface Account {
   profileUrl: string | null;
   toolUrl: string | null;
   otherUrl: string | null;
+  externalKey: string | null; // 外部ツール（wp-draft-tool等）側のアカウント識別キー
+  toolId: string | null; // 使用ツール（Toolsへのrelation先ページID）
 }
 
 export interface AccountInput {
@@ -41,6 +43,23 @@ export interface AccountInput {
   profileUrl: string | null;
   toolUrl: string | null;
   otherUrl: string | null;
+  externalKey: string | null;
+  toolId: string | null;
+}
+
+export interface Tool {
+  id: string;
+  name: string;
+  url: string | null;
+  paramKey: string | null;
+  platforms: Platform[];
+}
+
+export interface ToolInput {
+  name: string;
+  url: string | null;
+  paramKey: string | null;
+  platforms: Platform[];
 }
 
 export interface Post {

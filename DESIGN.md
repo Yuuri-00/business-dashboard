@@ -105,6 +105,7 @@ Accounts ──(relation)── Posts ──(relation)── Tasks
 | 状態 | select | 未着手 / 進行中 / 完了 |
 | 関連Post | relation（Posts） | 投稿作業に紐づくタスク |
 | 関連案件 | relation（ClientProjects） | 受託案件に紐づくタスク |
+| 関連アカウント | relation（Accounts） | 特定の投稿に紐づかない、アカウント単位の作業タスク |
 
 **ClientProjects（受託案件管理）**
 
