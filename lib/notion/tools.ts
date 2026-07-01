@@ -53,6 +53,7 @@ function buildToolProperties(
 }
 
 export async function listTools(): Promise<Tool[]> {
+  if (!NOTION_DB_ID.tools) return [];
   const dataSourceId = await getDataSourceId(NOTION_DB_ID.tools);
   const response = await notion.dataSources.query({
     data_source_id: dataSourceId,
